@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Entityes;
+using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
 
-namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Extensions
+namespace Pepegov.MicroserviceFramerwork.Patterns.Extensions
 {
     public static class IQueryablePageListExtensions
     {

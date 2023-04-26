@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Entityes;
+using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
 
-namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Reposytory;
+namespace Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
 public interface IRepository<TEntity> where TEntity : class
 {

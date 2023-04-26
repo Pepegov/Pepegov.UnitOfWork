@@ -1,4 +1,4 @@
-﻿namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Reposytory
+﻿namespace Pepegov.MicroserviceFramerwork.Patterns.Reposytory
 {
     public interface IRepositoryFactory
     {

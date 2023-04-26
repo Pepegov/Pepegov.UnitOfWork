@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Entityes;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Reposytory;
+using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
+using Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
 namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork;
 

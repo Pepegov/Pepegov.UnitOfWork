@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Reposytory;
+using Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
 namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork
 {

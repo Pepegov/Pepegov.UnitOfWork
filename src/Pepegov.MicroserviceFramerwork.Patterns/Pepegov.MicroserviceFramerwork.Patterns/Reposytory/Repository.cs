@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Entityes;
-using Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Extensions;
+using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
+using Pepegov.MicroserviceFramerwork.Patterns.Extensions;
 
-namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Reposytory;
+namespace Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
 public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {

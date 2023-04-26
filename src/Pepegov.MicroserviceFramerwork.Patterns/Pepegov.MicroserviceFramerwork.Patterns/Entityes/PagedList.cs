@@ -1,4 +1,4 @@
-﻿namespace Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.Entityes;
+﻿namespace Pepegov.MicroserviceFramerwork.Patterns.Entityes;
 
 public class PagedList<TSource, TResult> : IPagedList<TResult>
 {

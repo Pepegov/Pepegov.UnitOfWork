@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork", "Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork\Pepegov.MicroserviceFramerwork.Patterns.UnitOfWork.csproj", "{0920F41A-5626-4188-993A-A95D1A91D8CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepegov.MicroserviceFramerwork.Patterns", "Pepegov.MicroserviceFramerwork.Patterns\Pepegov.MicroserviceFramerwork.Patterns.csproj", "{0920F41A-5626-4188-993A-A95D1A91D8CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
 using Pepegov.MicroserviceFramerwork.Patterns.Extensions;
+using Pepegov.MicroserviceFramerwork.Patterns.Search.Temp.FuzzySearch;
 
 namespace Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
@@ -128,6 +129,57 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         return orderBy != null
             ? orderBy(query).Select(selector)
             : query.Select(selector);
+    }
+    
+    public async Task<IList<TEntity>> GetAllWithFuzzySearchAsync(
+        string searchQuery,
+        Func<TEntity, string> searchProperty,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<List<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        var listResult = await query.ToListAsync();
+        
+        
+        var distanceLevenshtein = new DistanceLevenshtein();
+        distanceLevenshtein.SetData(listResult
+            .Select(item => new Tuple<string, string>(searchProperty(item), searchProperty(item))).ToList());
+
+        var result = distanceLevenshtein.Search(searchQuery);
+        var matches = new List<string>();
+        matches.AddRange(result
+            .Where(i => i.Item3 <= 300)
+            .Select(i => i.Item1).ToList());
+
+        listResult = listResult
+            .Where(item => matches.
+                Any(i => searchProperty(item).ToLower().Contains(i))).ToList();
+
+        return orderBy is null ? listResult : orderBy(listResult).ToList();
     }
 
     public async Task<IList<TEntity>> GetAllAsync(bool disableTracking = true)
@@ -362,6 +414,62 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         {
             return query.Select(selector).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
+    }
+    
+    public async Task<IPagedList<TEntity>> GetPagedListWithFuzzySearchAsync(
+        string searchQuery,
+        Func<TEntity, string> searchProperty,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<List<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        int pageIndex = 0,
+        int pageSize = 20,
+        bool disableTracking = true,
+        CancellationToken cancellationToken = default,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        var listResult = await query.ToListAsync();
+        
+        
+        var distanceLevenshtein = new DistanceLevenshtein();
+        distanceLevenshtein.SetData(listResult
+            .Select(item => new Tuple<string, string>(searchProperty(item), searchProperty(item))).ToList());
+
+        var result = distanceLevenshtein.Search(searchQuery);
+        var matches = new List<string>();
+        matches.AddRange(result
+            .Where(i => i.Item3 <= 300)
+            .Select(i => i.Item1).ToList());
+
+        listResult = listResult
+            .Where(item => matches.
+                Any(i => searchProperty(item).ToLower().Contains(i))).ToList();
+        
+        return orderBy is not null
+            ? await orderBy(listResult).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken)
+            : await query.ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
     }
 
     public TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null,

@@ -1,4 +1,4 @@
-namespace Pepegov.MicroserviceFramerwork.Patterns.Search.Temp.FuzzySearch;
+namespace Pepegov.MicroserviceFramerwork.Patterns.Search.FuzzySearch;
 
 public class Word
 {

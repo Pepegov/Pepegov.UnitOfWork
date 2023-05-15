@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Pepegov.MicroserviceFramerwork.Patterns.Entityes;
 using Pepegov.MicroserviceFramerwork.Patterns.Extensions;
-using Pepegov.MicroserviceFramerwork.Patterns.Search.Temp.FuzzySearch;
+using Pepegov.MicroserviceFramerwork.Patterns.Search.FuzzySearch;
 
 namespace Pepegov.MicroserviceFramerwork.Patterns.Reposytory;
 
@@ -137,7 +137,8 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<List<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        bool disableTracking = true, bool ignoreQueryFilters = false)
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        int allowedMistakeDistance = 300)
     {
         IQueryable<TEntity> query = _dbSet;
         
@@ -165,14 +166,14 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         var listResult = await query.ToListAsync();
         
         
-        var distanceLevenshtein = new DistanceLevenshtein();
+        var distanceLevenshtein = new DistanceLevenshtein(new char[] { ' ', '-' });
         distanceLevenshtein.SetData(listResult
             .Select(item => new Tuple<string, string>(searchProperty(item), searchProperty(item))).ToList());
 
         var result = distanceLevenshtein.Search(searchQuery);
         var matches = new List<string>();
         matches.AddRange(result
-            .Where(i => i.Item3 <= 300)
+            .Where(i => i.Item3 <= allowedMistakeDistance)
             .Select(i => i.Item1).ToList());
 
         listResult = listResult
@@ -426,7 +427,8 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         int pageSize = 20,
         bool disableTracking = true,
         CancellationToken cancellationToken = default,
-        bool ignoreQueryFilters = false)
+        bool ignoreQueryFilters = false,
+        int allowedMistakeDistance = 300)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -453,14 +455,14 @@ public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : c
         var listResult = await query.ToListAsync();
         
         
-        var distanceLevenshtein = new DistanceLevenshtein();
+        var distanceLevenshtein = new DistanceLevenshtein(new char[] { ' ', '-' });
         distanceLevenshtein.SetData(listResult
             .Select(item => new Tuple<string, string>(searchProperty(item), searchProperty(item))).ToList());
 
         var result = distanceLevenshtein.Search(searchQuery);
         var matches = new List<string>();
         matches.AddRange(result
-            .Where(i => i.Item3 <= 300)
+            .Where(i => i.Item3 <= allowedMistakeDistance)
             .Select(i => i.Item1).ToList());
 
         listResult = listResult

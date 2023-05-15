@@ -1,11 +1,16 @@
-namespace Pepegov.MicroserviceFramerwork.Patterns.Search.Temp.FuzzySearch;
+namespace Pepegov.MicroserviceFramerwork.Patterns.Search.FuzzySearch;
 
 public class DistanceLevenshtein
 {
-    private readonly char[] Separator = new char[] { ' ', '-' };
-
+    private readonly char[] Separator;
     List<LanguageSet> Samples { get; set; } = new List<LanguageSet>();
 
+
+    public DistanceLevenshtein(char[] separators)
+    {
+        Separator = separators;
+    }
+    
     public void SetData(List<Tuple<string, string>> datas)
     {
         List<KeyValuePair<char, int>> codeKeys = LanguageLayouts.CodeKeysRus.Concat(LanguageLayouts.CodeKeysEng).ToList();

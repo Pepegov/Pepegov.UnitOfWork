@@ -49,6 +49,19 @@ public interface IRepository<TEntity> where TEntity : class
         bool disableTracking = true,
         CancellationToken cancellationToken = default,
         bool ignoreQueryFilters = false) where TResult : class;
+    
+    Task<IPagedList<TEntity>> GetPagedListWithFuzzySearchAsync(
+        string searchQuery,
+        Func<TEntity, string> searchProperty,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<List<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        int pageIndex = 0,
+        int pageSize = 20,
+        bool disableTracking = true,
+        CancellationToken cancellationToken = default,
+        bool ignoreQueryFilters = false,
+        int allowedMistakeDistance = 300);
 
     #endregion
 
@@ -143,6 +156,17 @@ public interface IRepository<TEntity> where TEntity : class
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
         bool ignoreQueryFilters = false);
+
+
+    Task<IList<TEntity>> GetAllWithFuzzySearchAsync(
+        string searchQuery,
+        Func<TEntity, string> searchProperty,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<List<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        int allowedMistakeDistance = 300);
+    
 
     #endregion
 

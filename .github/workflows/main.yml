@@ -17,11 +17,11 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Install dependencies
-      run: dotnet restore src/Pepegov.MicroserviceFramerwork.Patterns/Pepegov.MicroserviceFramerwork.Patterns.sln
+      run: dotnet restore src/Pepegov.UnitOfWork/Pepegov.UnitOfWork.sln
     - name: Build
-      run: dotnet build src/Pepegov.MicroserviceFramerwork.Patterns/Pepegov.MicroserviceFramerwork.Patterns.sln --configuration Release --no-restore 
-    - name: Publish Pepegov.MicroserviceFramerwork.Patterns
+      run: dotnet build src/Pepegov.UnitOfWork/Pepegov.UnitOfWork.sln --configuration Release --no-restore 
+    - name: Publish Pepegov.UnitOfWork
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-          PROJECT_FILE_PATH: src/Pepegov.MicroserviceFramerwork.Patterns/Pepegov.MicroserviceFramerwork.Patterns/Pepegov.MicroserviceFramerwork.Patterns.csproj
+          PROJECT_FILE_PATH: src/Pepegov.UnitOfWork/Pepegov.UnitOfWork/Pepegov.UnitOfWork.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

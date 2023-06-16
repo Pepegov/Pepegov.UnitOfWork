@@ -6,7 +6,7 @@ namespace Pepegov.UnitOfWork.EntityFramework
 {
     public static class UnitOfWorkServiceCollectionExtensions
     {
-        public static IServiceCollection AddUnitOfWork<TContext>(this IServiceCollection services)
+        public static IServiceCollection AddUnitOfWorkEF<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
             services.AddScoped<IRepositoryEFFactory, UnitOfWorkEF<TContext>>();
@@ -16,7 +16,7 @@ namespace Pepegov.UnitOfWork.EntityFramework
             return services;
         }
 
-        public static IServiceCollection AddCustomRepository<TEntity, TRepository>(this IServiceCollection services)
+        public static IServiceCollection AddCustomRepositoryEF<TEntity, TRepository>(this IServiceCollection services)
             where TEntity : class
             where TRepository : class, IRepositoryEF<TEntity>
         {

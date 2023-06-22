@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using Pepegov.UnitOfWork.MongoDb;
 using Pepegov.UnitOfWork.MongoDb.Database;
 using Pepegov.UnitOfWork.MongoDb.Repository;
 
-namespace Calabonga.UnitOfWork.MongoDb;
+namespace Pepegov.UnitOfWork.MongoDb;
 
 /// <summary>
 /// CALABONGA Warning: do not remove sealed
@@ -114,7 +113,7 @@ public sealed class UnitOfWorkMongoDb : IUnitOfWorkMongoDb
             throw;
         }
 
-        catch (Exception exception)
+        catch (System.Exception exception)
         {
             await session1.AbortTransactionAsync(cancellationToken);
             if (_logger.IsEnabled(LogLevel.Information))
@@ -164,7 +163,7 @@ public sealed class UnitOfWorkMongoDb : IUnitOfWorkMongoDb
             throw;
         }
 
-        catch (Exception exception)
+        catch (System.Exception exception)
         {
             await session.AbortTransactionAsync(transactionContext.CancellationToken);
             if (transactionContext.Logger.IsEnabled(LogLevel.Information))
@@ -215,7 +214,7 @@ public sealed class UnitOfWorkMongoDb : IUnitOfWorkMongoDb
             throw;
         }
 
-        catch (Exception exception)
+        catch (System.Exception exception)
         {
             await session1.AbortTransactionAsync(cancellationToken);
             if (_logger.IsEnabled(LogLevel.Information))
@@ -266,7 +265,7 @@ public sealed class UnitOfWorkMongoDb : IUnitOfWorkMongoDb
             throw;
         }
 
-        catch (Exception exception)
+        catch (System.Exception exception)
         {
             await session.AbortTransactionAsync(transactionContext.CancellationToken);
             if (transactionContext.Logger.IsEnabled(LogLevel.Information))

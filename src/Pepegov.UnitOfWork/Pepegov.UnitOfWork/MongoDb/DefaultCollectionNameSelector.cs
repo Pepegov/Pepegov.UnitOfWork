@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Calabonga.UnitOfWork.MongoDb;
+namespace Pepegov.UnitOfWork.MongoDb;
 
 /// <summary>
 /// Default collection name selector

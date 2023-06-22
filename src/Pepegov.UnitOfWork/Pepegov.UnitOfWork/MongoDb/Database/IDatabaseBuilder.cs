@@ -1,5 +1,4 @@
-﻿using Calabonga.UnitOfWork.MongoDb;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
 namespace Pepegov.UnitOfWork.MongoDb.Database;
 

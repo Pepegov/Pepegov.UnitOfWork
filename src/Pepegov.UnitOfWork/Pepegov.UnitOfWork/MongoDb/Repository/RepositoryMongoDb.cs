@@ -1,10 +1,10 @@
-﻿using Calabonga.UnitOfWork.MongoDb;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Pepegov.UnitOfWork.Entityes;
 using Pepegov.UnitOfWork.Exception;
+using Pepegov.UnitOfWork.Extensions;
 using Pepegov.UnitOfWork.MongoDb.Database;
 
 namespace Pepegov.UnitOfWork.MongoDb.Repository

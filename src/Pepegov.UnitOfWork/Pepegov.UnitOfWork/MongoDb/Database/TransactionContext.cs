@@ -1,5 +1,4 @@
-﻿using Calabonga.UnitOfWork.MongoDb;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Pepegov.UnitOfWork.MongoDb.Database

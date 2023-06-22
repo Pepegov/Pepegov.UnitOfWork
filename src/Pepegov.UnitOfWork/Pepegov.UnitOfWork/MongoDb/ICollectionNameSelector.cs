@@ -1,4 +1,4 @@
-﻿namespace Calabonga.UnitOfWork.MongoDb
+﻿namespace Pepegov.UnitOfWork.MongoDb
 {
     /// <summary>
     /// Collection name selector for MongoDb entities

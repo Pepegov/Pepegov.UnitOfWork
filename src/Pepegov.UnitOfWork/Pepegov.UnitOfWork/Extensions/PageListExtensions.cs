@@ -1,6 +1,6 @@
 ﻿using Pepegov.UnitOfWork.Entityes;
 
-namespace Calabonga.UnitOfWork.MongoDb;
+namespace Pepegov.UnitOfWork.Extensions;
 
 /// <summary>
 /// Extensions fro Queryable LINQ
@@ -30,4 +30,24 @@ public static class PageListExtensions
 
         return pagedList;
     }
+    
+    /// <summary>
+    /// Upcast PagedList<> => IPagedList<>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IPagedList<T> Empty<T>() 
+        => (IPagedList<T>) new PagedList<T>();
+
+    /// <summary>
+    /// Upcast PagedList<,> => IPagedList<,>
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="converter"></param>
+    /// <typeparam name="TResult"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
+    /// <returns></returns>
+    public static IPagedList<TResult> From<TResult, TSource>(IPagedList<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> converter)
+        => (IPagedList<TResult>) new PagedList<TSource, TResult>(source, converter);
+
 }

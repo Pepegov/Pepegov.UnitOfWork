@@ -1,6 +1,4 @@
-﻿using Calabonga.UnitOfWork.MongoDb;
-
-namespace Pepegov.UnitOfWork.MongoDb.Database;
+﻿namespace Pepegov.UnitOfWork.MongoDb.Database;
 
 /// <summary>
 /// Database settings for MongoDb connection

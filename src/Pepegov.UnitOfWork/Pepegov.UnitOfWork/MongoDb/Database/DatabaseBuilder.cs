@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Calabonga.UnitOfWork.MongoDb;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;

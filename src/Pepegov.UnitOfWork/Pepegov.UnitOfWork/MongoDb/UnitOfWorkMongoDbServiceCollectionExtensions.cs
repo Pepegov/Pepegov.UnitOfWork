@@ -18,7 +18,7 @@ namespace Pepegov.UnitOfWork.MongoDb
         /// <param name="services"></param>
         /// <param name="implementationFactory"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static IServiceCollection AddUnitOfWork(this IServiceCollection services, Func<IServiceProvider, IDatabaseSettings> implementationFactory)
+        public static IServiceCollection AddUnitOfWorkMongoDb(this IServiceCollection services, Func<IServiceProvider, IDatabaseSettings> implementationFactory)
         {
             if (services == null)
             {
@@ -45,7 +45,7 @@ namespace Pepegov.UnitOfWork.MongoDb
         ///// <remarks>
         ///// This method only support one db context, if been called more than once, will throw exception.
         ///// </remarks>
-        public static IServiceCollection AddUnitOfWork(this IServiceCollection services, Action<DatabaseSettings> applyConfiguration)
+        public static IServiceCollection AddUnitOfWorkMongoDb(this IServiceCollection services, Action<DatabaseSettings> applyConfiguration)
         {
             services.TryAddScoped<IUnitOfWorkMongoDb, UnitOfWorkMongoDb>();
             services.TryAddScoped<IDatabaseBuilder, DatabaseBuilder>();
@@ -67,7 +67,7 @@ namespace Pepegov.UnitOfWork.MongoDb
         ///// <remarks>
         ///// This method only support one db context, if been called more than once, will throw exception.
         ///// </remarks>
-        public static IServiceCollection AddUnitOfWork(this IServiceCollection services, IConfigurationSection configurationSection)
+        public static IServiceCollection AddUnitOfWorkMongoDb(this IServiceCollection services, IConfigurationSection configurationSection)
         {
             services.TryAddScoped<IUnitOfWorkMongoDb, UnitOfWorkMongoDb>();
             services.TryAddScoped<IDatabaseBuilder, DatabaseBuilder>();

@@ -1,4 +1,3 @@
-
 name: .NET Core
 
 on:
@@ -24,4 +23,14 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: src/Pepegov.UnitOfWork/Pepegov.UnitOfWork/Pepegov.UnitOfWork.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Publish Pepegov.UnitOfWork.EntityFramework
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+          PROJECT_FILE_PATH: src/Pepegov.UnitOfWork/Pepegov.UnitOfWork.EntityFramework/Pepegov.UnitOfWork.EntityFramework.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Publish Pepegov.UnitOfWork.MongoDb
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+          PROJECT_FILE_PATH: src/Pepegov.UnitOfWork/Pepegov.UnitOfWork.MongoDb/Pepegov.UnitOfWork.MongoDb.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

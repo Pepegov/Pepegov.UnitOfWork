@@ -17,7 +17,7 @@ Get started by reading through the [documentation](https://github.com/Pepegov/Pe
 
 ## Building from Source
 
- 1. Install the latest [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+ 1. Install the latest [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
  2. Clone the source down to your machine<br/>
     ```bash
     git clone https://github.com/Pepegov/Pepegov.UnitOfWork

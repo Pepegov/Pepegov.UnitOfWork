@@ -7,7 +7,7 @@ Pepegov.UnitOfWork is  [GPL-3.0 license](https://github.com/Pepegov/Pepegov.Unit
 
 ## Documentation
 
-Get started by reading through the [documentation](https://github.com/Pepegov/Pepegov.UnitOfWork.wiki.git).
+Get started by reading through the [documentation](https://github.com/Pepegov/Pepegov.UnitOfWork/wiki).
 
 ## Build Status
 

@@ -9,6 +9,8 @@ Pepegov.UnitOfWork is  [GPL-3.0 license](https://github.com/Pepegov/Pepegov.Unit
 
 Get started by reading through the [documentation](https://github.com/Pepegov/Pepegov.UnitOfWork.wiki.git).
 
+## Build Status
+
 | Branch        |                                                                                                Status                                                                                                |
 |---------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | master        |  [![master](https://github.com/Pepegov/Pepegov.UnitOfWork/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/Pepegov/Pepegov.UnitOfWork/actions/workflows/main.yml)                  |

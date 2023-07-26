@@ -1,4 +1,5 @@
 ﻿using Pepegov.UnitOfWork.Entityes;
+using System.Threading.Tasks;
 
 namespace Pepegov.UnitOfWork.Extensions;
 
@@ -49,5 +50,57 @@ public static class PageListExtensions
     /// <returns></returns>
     public static IPagedList<TResult> From<TResult, TSource>(IPagedList<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> converter)
         => (IPagedList<TResult>) new PagedList<TSource, TResult>(source, converter);
+    
+    public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
+        int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default)
+    {
+        if (indexFrom > pageIndex)
+        {
+            throw new ArgumentException(
+                $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
+        }
+
+        var count = source.Count();
+        var items = source.Skip((pageIndex - indexFrom) * pageSize)
+            .Take(pageSize).ToList();
+
+        var pagedList = new PagedList<T>()
+        {
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+            IndexFrom = indexFrom,
+            TotalCount = count,
+            Items = items,
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+        };
+
+        return pagedList;
+    }
+
+    public static IPagedList<T> ToPagedList<T>(this IQueryable<T> source, int pageIndex,
+        int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default)
+    {
+        if (indexFrom > pageIndex)
+        {
+            throw new ArgumentException(
+                $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
+        }
+
+        var count = source.Count();
+        var items = source.Skip((pageIndex - indexFrom) * pageSize)
+            .Take(pageSize).ToList();
+
+        var pagedList = new PagedList<T>()
+        {
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+            IndexFrom = indexFrom,
+            TotalCount = count,
+            Items = items,
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+        };
+
+        return pagedList;
+    }
 
 }

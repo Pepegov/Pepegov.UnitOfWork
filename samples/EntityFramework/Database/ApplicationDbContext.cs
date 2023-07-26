@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Pepegov.UnitOfWork.EntityFramework.Test.Database;
+namespace UnitOfWorkEntityFrameworkSample.Database;
 
 public class ApplicationDbContext : DbContext
 {
@@ -12,10 +12,5 @@ public class ApplicationDbContext : DbContext
     {
         optionsBuilder.UseSqlite("Data Source=ef.test.sqlite");
         base.OnConfiguring(optionsBuilder);
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
     }
 }

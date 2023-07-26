@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Pepegov.UnitOfWork.EntityFramework.Test.Database;
+namespace UnitOfWorkEntityFrameworkSample.Database;
 
 public static class DatabaseInitializer
 {

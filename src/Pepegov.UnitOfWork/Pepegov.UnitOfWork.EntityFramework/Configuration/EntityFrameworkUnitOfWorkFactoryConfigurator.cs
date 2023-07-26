@@ -19,6 +19,6 @@ public class EntityFrameworkUnitOfWorkFactoryConfigurator : IEntityFrameworkUnit
     {
         ArgumentNullException.ThrowIfNull(_context,$"{nameof(_context)} in {nameof(DatabaseContext)}");
         
-        DbContext = _context.GetService<TDbContext>();
+        DbContext = _context.CreateScope().ServiceProvider.GetService<TDbContext>();
     }
 }

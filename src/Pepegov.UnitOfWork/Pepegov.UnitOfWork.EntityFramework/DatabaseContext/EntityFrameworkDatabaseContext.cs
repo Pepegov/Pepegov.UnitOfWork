@@ -74,10 +74,11 @@ public class EntityFrameworkDatabaseContext: IEntityFrameworkDatabaseContext
 
     public void Dispose()
     {
+        //TODO: fix that
         //Transaction.Rollback();
-        Transaction.Dispose();
-        _efDbTransaction?.Rollback();
-        _efDbTransaction?.Dispose();
-        DbContext.Dispose();
+        //Transaction.Dispose();
+        //_efDbTransaction?.Rollback();
+        //_efDbTransaction?.Dispose();
+        //DbContext.Dispose();
     }
 }

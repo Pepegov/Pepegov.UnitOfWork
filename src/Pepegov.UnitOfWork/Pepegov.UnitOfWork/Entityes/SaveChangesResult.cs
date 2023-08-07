@@ -6,7 +6,7 @@ public sealed class SaveChangesResult
 
     public SaveChangesResult(string message) : this() => AddMessage(message);
 
-    public System.Exception? Exception { get; set; }
+    public Exception? Exception { get; set; }
 
     public bool IsOk => Exception == null;
 

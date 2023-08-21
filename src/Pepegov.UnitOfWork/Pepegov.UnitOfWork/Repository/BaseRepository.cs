@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Pepegov.UnitOfWork.Exceptions;
 

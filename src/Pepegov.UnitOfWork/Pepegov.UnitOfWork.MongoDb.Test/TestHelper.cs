@@ -6,7 +6,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Test;
 
 public static class TestHelper
 {
-    public static IUnitOfWorkMongoInstance GetUnitOfWorkMongoDbInstanceStandart
+    public static IUnitOfWorkMongoInstance GetUnitOfWorkMongoDbInstanceStandard
         => _serviceProvider.GetRequiredService<IUnitOfWorkMongoInstance>();
 
     public static IUnitOfWorkMongoInstance GetUnitOfWorkMongoDbInstanceWithReplica
@@ -25,6 +25,7 @@ public static class TestHelper
                 configurator.DatabaseContext(settings =>
                 {
                     settings.ConnectionString = "mongodb://localhost:27017/?authSource=admin&readPreference=primary&ssl=false&directConnection=true";
+                    settings.ReplicaSetName = "rs0";
                     settings.DatabaseName = "pepegov_unitofwork_mongoDb_replica_test";
                 });
             }, factory =>

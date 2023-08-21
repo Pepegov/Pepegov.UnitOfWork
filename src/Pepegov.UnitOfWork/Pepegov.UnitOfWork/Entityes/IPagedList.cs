@@ -1,4 +1,6 @@
-﻿namespace Pepegov.UnitOfWork.Entityes
+﻿using System.Collections.Generic;
+
+namespace Pepegov.UnitOfWork.Entityes
 {
     public interface IPagedList<T>
     {

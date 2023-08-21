@@ -14,6 +14,25 @@ public class RepositoryAdoNet<TEntity> : IRepositoryAdoNet<TEntity> where TEntit
         _tableName = GetType().GetGenericArguments()[0].Name;
     }
 
+    #region Find
+
+    public TEntity? Find(params object[] keyValues)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask<TEntity?> FindAsync(params object[] keyValues)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+    
     #region Insert
 
     public void Insert(params TEntity[] entities)

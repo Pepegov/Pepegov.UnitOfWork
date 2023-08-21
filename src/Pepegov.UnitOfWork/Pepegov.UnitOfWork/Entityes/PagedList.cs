@@ -1,4 +1,8 @@
-﻿namespace Pepegov.UnitOfWork.Entityes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Pepegov.UnitOfWork.Entityes;
 
 public class PagedList<TSource, TResult> : IPagedList<TResult>
 {

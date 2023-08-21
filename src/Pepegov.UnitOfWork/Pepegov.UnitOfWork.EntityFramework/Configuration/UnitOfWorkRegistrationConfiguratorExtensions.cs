@@ -1,3 +1,4 @@
+using System;
 using Pepegov.UnitOfWork.Configuration;
 
 namespace Pepegov.UnitOfWork.EntityFramework.Configuration;

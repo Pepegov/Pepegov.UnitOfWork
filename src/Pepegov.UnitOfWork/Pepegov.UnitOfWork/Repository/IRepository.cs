@@ -1,7 +1,21 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Pepegov.UnitOfWork.Repository;
 
 public interface IRepository<TEntity> where TEntity : class
 {
+    #region Find
+
+    TEntity? Find(params object[] keyValues);
+
+    ValueTask<TEntity?> FindAsync(params object[] keyValues);
+
+    ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken);
+
+    #endregion
+    
     #region Insert
 
     void Insert(params TEntity[] entities);

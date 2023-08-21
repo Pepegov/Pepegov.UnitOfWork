@@ -1,10 +1,13 @@
+using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Pepegov.UnitOfWork;
 
 public interface IDatabaseContext : IDisposable
 {
-    IDbTransaction Transaction { get; }
+    ITransactionAdapter Transaction { get; }
     void BeginTransaction();
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);
     void CommitTransaction();

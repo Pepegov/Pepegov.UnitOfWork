@@ -1,7 +1,7 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Pepegov.UnitOfWork.Configuration;
-using Pepegov.UnitOfWork.EntityFramework.Repository;
 
 namespace Pepegov.UnitOfWork.EntityFramework.Configuration;
 

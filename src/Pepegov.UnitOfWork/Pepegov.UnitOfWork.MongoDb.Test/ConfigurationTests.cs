@@ -14,7 +14,7 @@ public class ConfigurationTests
         services.AddLogging();
         services.AddUnitOfWork(x =>
         {
-            x.UsingMongoDb((context, configurator) =>
+            x.UsingMongoDb((_, configurator) =>
             {
                 configurator.DatabaseContext(settings =>
                 {
@@ -56,21 +56,21 @@ public class ConfigurationTests
         var serviceProvider = services.BuildServiceProvider();
         
         var nameSelector = serviceProvider.GetService<ICollectionNameSelector>();
-        Assert.That(nameSelector is not null && nameSelector is DefaultCollectionNameSelector);
+        Assert.That(nameSelector is DefaultCollectionNameSelector);
         
         var databaseSettings = serviceProvider.GetService<IDatabaseSettings>();
-        Assert.That(databaseSettings is not null && databaseSettings is DatabaseSettings);
+        Assert.That(databaseSettings is DatabaseSettings);
 
         var databaseBuilder = serviceProvider.GetService<IDatabaseBuilder>();
-        Assert.That(databaseBuilder is not null && databaseBuilder is DatabaseBuilder);
+        Assert.That(databaseBuilder is DatabaseBuilder);
 
         var databaseContext = serviceProvider.GetService<IMongoDatabaseContext>();
-        Assert.That(databaseContext is not null && databaseContext is MongoDatabaseContext);
+        Assert.That(databaseContext is MongoDatabaseContext);
         
         var instanceFactory = serviceProvider.GetService<IRepositoryMongoFactory>();
-        Assert.That(instanceFactory is not null && instanceFactory is UnitOfWorkMongoDbInstance);
+        Assert.That(instanceFactory is UnitOfWorkMongoDbInstance);
         
         var instance = serviceProvider.GetService<IUnitOfWorkMongoInstance>();
-        Assert.That(instance is not null && instance is UnitOfWorkMongoDbInstance);
+        Assert.That(instance is UnitOfWorkMongoDbInstance);
     }
 }

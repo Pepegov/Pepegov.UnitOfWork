@@ -12,7 +12,7 @@ public class UpdateTests
     [SetUp]
     public void Setup()
     {
-        _unitOfWorkMongoDbInstance = TestHelper.GetUnitOfWorkMongoDbInstanceStandart;
+        _unitOfWorkMongoDbInstance = TestHelper.GetUnitOfWorkMongoDbInstanceStandard;
     }
     
     [Test]

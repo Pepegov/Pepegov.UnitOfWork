@@ -1,4 +1,7 @@
-﻿namespace Pepegov.UnitOfWork.Entityes;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Pepegov.UnitOfWork.Entityes;
 
 public sealed class SaveChangesResult
 {

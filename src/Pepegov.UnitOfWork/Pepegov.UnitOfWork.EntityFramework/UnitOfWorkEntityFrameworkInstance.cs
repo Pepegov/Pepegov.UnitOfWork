@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using Pepegov.UnitOfWork.Entityes;
-using Pepegov.UnitOfWork.EntityFramework.DatabaseContext;
+using Pepegov.UnitOfWork.EntityFramework.Database;
 using Pepegov.UnitOfWork.EntityFramework.Repository;
 using Pepegov.UnitOfWork.Repository;
 
@@ -75,19 +77,19 @@ public sealed class UnitOfWorkEntityFrameworkInstance<TContext> : BaseUnitOfWork
         }
         catch (Exception exception)
         {
-            LastSaveChangesResult.Exception = exception;
+            LastSaveChangesResult!.Exception = exception;
         }
     }
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            await (DatabaseContext as IEntityFrameworkDatabaseContext)?.SaveChangesAsync()!;
+            await (DatabaseContext as IEntityFrameworkDatabaseContext)?.SaveChangesAsync(cancellationToken)!;
         }
         catch (Exception exception)
         {
-            LastSaveChangesResult.Exception = exception;
+            LastSaveChangesResult!.Exception = exception;
         }
     }
     

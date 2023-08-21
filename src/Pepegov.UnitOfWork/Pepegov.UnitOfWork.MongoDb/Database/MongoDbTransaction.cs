@@ -1,9 +1,12 @@
+using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 
 namespace Pepegov.UnitOfWork.MongoDb.Database;
 
-public class MongoDbTransaction : IDbTransaction
+public class MongoDbTransaction : ITransactionAdapter
 {
     private readonly IClientSessionHandle _session;
     private readonly TransactionOptions _transactionOptions;
@@ -20,6 +23,12 @@ public class MongoDbTransaction : IDbTransaction
     public void BeginTransaction()
     {
         _session.StartTransaction(_transactionOptions);
+    }
+
+    public Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        _session.StartTransaction();
+        return Task.CompletedTask;
     }
     
     public void Commit()

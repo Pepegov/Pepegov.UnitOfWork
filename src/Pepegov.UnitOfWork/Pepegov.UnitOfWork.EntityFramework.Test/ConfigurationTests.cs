@@ -1,4 +1,7 @@
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Pepegov.UnitOfWork.EntityFramework.Configuration;
 using Pepegov.UnitOfWork.EntityFramework.Repository;
 using Pepegov.UnitOfWork.EntityFramework.Test.Database;
@@ -14,6 +17,16 @@ public class ConfigurationTests
     {
         var services = new ServiceCollection();
         services.AddDbContext<ApplicationDbContext>();
+        /*
+        string migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name!;
+        string connectionString = "Server=localhost;Port=5432;User Id=postgres;Password=qweQWE123;Database=Pepegov.UnitOfWork.Test";
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString,
+                b => b.MigrationsAssembly(migrationsAssembly));
+        });
+        */
         
         services.AddUnitOfWork(x =>
         {
@@ -32,16 +45,23 @@ public class ConfigurationTests
     }
 
     [Test]
+    public void DatabaseContextTest()
+    {
+        var unitOfWorkManager = _serviceProvider.GetService<IUnitOfWorkManager>();
+        Assert.That(unitOfWorkManager is UnitOfWorkManager);   
+    }
+    
+    [Test]
     public void AddInstanceTest()
     {
         var instanceFactory = _serviceProvider.GetService<IRepositoryEntityFrameworkInstanceFactory>();
-        Assert.That(instanceFactory is not null && instanceFactory is IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>);
+        Assert.That(instanceFactory is IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>);
         
         var instance = _serviceProvider.GetService<IUnitOfWorkEntityFrameworkInstance>();
-        Assert.That(instance is not null && instance is IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>);
+        Assert.That(instance is IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>);
         
         var instanceContext = _serviceProvider.GetService<IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>>();
-        Assert.That(instanceContext is not null && instanceContext is IUnitOfWorkEntityFrameworkInstance<ApplicationDbContext>);
+        Assert.That(instanceContext != null);
     }
     
 }

@@ -12,7 +12,7 @@ public class InsertDeleteTests
     [SetUp]
     public void Setup()
     {
-        _mongoInstance = TestHelper.GetUnitOfWorkMongoDbInstanceStandart;
+        _mongoInstance = TestHelper.GetUnitOfWorkMongoDbInstanceStandard;
     }
 
     [Test]

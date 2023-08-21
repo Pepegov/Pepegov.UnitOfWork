@@ -1,5 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -116,6 +121,29 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
         #endregion
 
+        //test this region
+        #region Find
+        
+        public TDocument? Find(params object[] keyValues)
+        {
+            var item =  Collection.Find(Builders<TDocument>.Filter.Eq(IdInDbName, keyValues));
+            return item.ToList().FirstOrDefault();
+        }
+
+        public async ValueTask<TDocument?> FindAsync(params object[] keyValues)
+        {
+            var item = await Collection.FindAsync(Builders<TDocument>.Filter.Eq(IdInDbName, keyValues));
+            return await item.FirstOrDefaultAsync();
+        }
+
+        public async ValueTask<TDocument?> FindAsync(object[] keyValues, CancellationToken cancellationToken)
+        {
+            var item = await Collection.FindAsync(Builders<TDocument>.Filter.Eq(IdInDbName, keyValues), cancellationToken: cancellationToken);
+            return await item.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        }
+
+        #endregion
+        
         #region Insert
 
         public void Insert(params TDocument[] entities)
@@ -267,7 +295,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
             return orderBy is not null
                 ? orderBy(query).FirstOrDefault()
-                : query.FirstOrDefault();
+                : IAsyncCursorSourceExtensions.FirstOrDefault(query);
         }
 
         public async Task<TDocument?> GetFirstOrDefaultAsync(Expression<Func<TDocument, bool>>? predicate = null, 
@@ -408,8 +436,8 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
             }
 
             var distanceLevenshtein = new DistanceLevenshtein(new char[] { ' ', '-' });
-            distanceLevenshtein.SetData(query.Select(
-                item => new Tuple<string, string>(searchProperty(item), searchProperty(item))).ToList());
+            distanceLevenshtein.SetData(IAsyncCursorSourceExtensions.ToList(query.Select(
+                item => new Tuple<string, string>(searchProperty(item), searchProperty(item)))));
 
             var result = distanceLevenshtein.Search(searchQuery);
             var matches = new List<string>();
@@ -468,7 +496,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
             return predicate is null
-                ? query.Any()
+                ? IAsyncCursorSourceExtensions.Any(query)
                 : query.Any(predicate);
         }
 

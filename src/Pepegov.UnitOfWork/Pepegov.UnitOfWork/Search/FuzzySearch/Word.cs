@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Pepegov.UnitOfWork.Search.FuzzySearch;
 
 public class Word

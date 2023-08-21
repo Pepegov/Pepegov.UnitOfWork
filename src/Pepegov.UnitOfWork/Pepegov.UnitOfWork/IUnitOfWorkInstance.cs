@@ -1,5 +1,7 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Pepegov.UnitOfWork.Entityes;
-using Pepegov.UnitOfWork.Repository;
 
 namespace Pepegov.UnitOfWork;
 
@@ -9,11 +11,11 @@ public interface IUnitOfWorkInstance : IDisposable
     public SaveChangesResult? LastSaveChangesResult { get; }
 
     void BeginTransaction();
-    Task BeginTransactionAsync();
+    Task BeginTransactionAsync(CancellationToken cancellationToken = default);
     
     void CommitTransaction();
-    Task CommitTransactionAsync();
+    Task CommitTransactionAsync(CancellationToken cancellationToken = default);
     
     void RollbackTransaction();
-    Task RollbackTransactionAsync();
+    Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
 }

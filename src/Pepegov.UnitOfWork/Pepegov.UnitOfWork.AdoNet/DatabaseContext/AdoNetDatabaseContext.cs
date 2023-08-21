@@ -5,7 +5,8 @@ namespace Pepegov.UnitOfWork.AdoNet.DatabaseContext;
 public class AdoNetDatabaseContext : IDatabaseContext, IDisposable
 {
     private IDbConnection _connection;
-    private IDbTransaction? _transaction;
+    private ITransactionAdapter? _transaction;
+    public ITransactionAdapter Transaction { get; } //fix
 
     public AdoNetDatabaseContext(IDbConnection dbConnection)
     {
@@ -29,11 +30,9 @@ public class AdoNetDatabaseContext : IDatabaseContext, IDisposable
     public IDbCommand CreateCommand()
     {
         var command = _connection.CreateCommand();
-        command.Transaction = _transaction;
+        //command.Transaction = _transaction;
         return command;
     }
-
-    public IDbTransaction Transaction { get; }
 
     public void SaveChanges()
     {
@@ -58,12 +57,12 @@ public class AdoNetDatabaseContext : IDatabaseContext, IDisposable
 
     public void BeginTransaction()
     {
-        _transaction = _connection.BeginTransaction();
+        //_transaction = _connection.BeginTransaction();
     }
 
     public Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-        _transaction = _connection.BeginTransaction();
+        //_transaction = _connection.BeginTransaction();
         return Task.CompletedTask;
     }
 

@@ -1,5 +1,8 @@
+using System;
 using System.Data;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using DnsClient.Internal;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -15,7 +18,7 @@ public class MongoDatabaseContext : IMongoDatabaseContext
     private readonly ILogger<IMongoDatabaseContext> _logger;
 
     //TODO: add async transaction version
-    public IDbTransaction? Transaction { get; private set; }
+    public ITransactionAdapter? Transaction { get; private set; }
     public IMongoDatabase MongoDatabase { get; private set; }
     public IDatabaseBuilder DatabaseBuilder { get; private set; }
     public IClientSessionHandle SessionHandle { get; private set; }
@@ -35,15 +38,14 @@ public class MongoDatabaseContext : IMongoDatabaseContext
     {
         Transaction ??= new MongoDbTransaction(
             new TransactionContext(null, SessionHandle));
-        ((Transaction as MongoDbTransaction)!).BeginTransaction(); 
+        Transaction.BeginTransaction(); 
     }
 
     public Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         Transaction ??= new MongoDbTransaction(
             new TransactionContext(null, SessionHandle, cancellationToken));
-        ((Transaction as MongoDbTransaction)!).BeginTransaction();
-        return Task.CompletedTask;
+        return Transaction.BeginTransactionAsync(cancellationToken);
     }
 
     public void CommitTransaction()
@@ -55,8 +57,7 @@ public class MongoDatabaseContext : IMongoDatabaseContext
     public Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(Transaction, "Transaction != null");
-        Transaction.Commit();
-        return Task.CompletedTask;
+        return Transaction.CommitAsync(cancellationToken);
     }
 
     public void RollbackTransaction()
@@ -68,8 +69,7 @@ public class MongoDatabaseContext : IMongoDatabaseContext
     public Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(Transaction, "Transaction != null");
-        Transaction.Rollback();
-        return Task.CompletedTask;
+        return Transaction.RollbackAsync(cancellationToken);
     }
 
     #endregion

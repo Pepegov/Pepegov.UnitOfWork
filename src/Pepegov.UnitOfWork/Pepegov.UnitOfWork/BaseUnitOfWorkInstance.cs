@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Pepegov.UnitOfWork.Entityes;
 
 namespace Pepegov.UnitOfWork;
@@ -20,20 +23,20 @@ public abstract class BaseUnitOfWorkInstance : IUnitOfWorkInstance
     public void BeginTransaction()
         => TryTransaction(() => { DatabaseContext.BeginTransaction(); });
     
-    public async Task BeginTransactionAsync()
-        => await TryTransactionAsync(() => DatabaseContext.BeginTransactionAsync());
+    public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        => await TryTransactionAsync((token) => DatabaseContext.BeginTransactionAsync(token), cancellationToken);
 
     public void CommitTransaction()
         => TryTransaction(() => { DatabaseContext.CommitTransaction(); });
 
-    public async Task CommitTransactionAsync()
-        => await TryTransactionAsync(() => DatabaseContext.CommitTransactionAsync());
+    public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        => await TryTransactionAsync((token) => DatabaseContext.CommitTransactionAsync(token), cancellationToken);
     
     public void RollbackTransaction()
         => TryTransaction(() => { DatabaseContext.RollbackTransaction(); });
 
-    public async Task RollbackTransactionAsync()
-        => await TryTransactionAsync(() => DatabaseContext.RollbackTransactionAsync());
+    public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        => await TryTransactionAsync((token) => DatabaseContext.RollbackTransactionAsync(token), cancellationToken);
 
     private void TryTransaction(Action action)
     {
@@ -51,11 +54,11 @@ public abstract class BaseUnitOfWorkInstance : IUnitOfWorkInstance
         }
     }
     
-    private async Task TryTransactionAsync(Func<Task> action)
+    private async Task TryTransactionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
     {
         try
         {
-           await action();
+           await action(cancellationToken);
         }
         catch (NotSupportedException)
         {

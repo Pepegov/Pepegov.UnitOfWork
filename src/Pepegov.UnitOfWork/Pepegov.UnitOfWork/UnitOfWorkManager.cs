@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Pepegov.UnitOfWork;
 
 public class UnitOfWorkManager : IUnitOfWorkManager
@@ -21,7 +27,9 @@ public class UnitOfWorkManager : IUnitOfWorkManager
         return (TInstance)instance;
     }
 
-    public void SaveAllChanges()
+    #region SaveChanges
+
+    public void SaveChanges()
     {
         foreach (var instance in Instances)
         {
@@ -32,14 +40,56 @@ public class UnitOfWorkManager : IUnitOfWorkManager
         }
     }
 
-    public async Task SaveAllChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var instance in Instances)
         {
             if (instance is IUnitOfWorkTrackingInstance trackingInstance)
             {
-                await trackingInstance.SaveChangesAsync();
+                await trackingInstance.SaveChangesAsync(cancellationToken);
             }
         }
     }
+
+    #endregion
+
+    #region CommitTransactions
+
+    public void CommitTransactions()
+    {
+        foreach (var instance in Instances)
+        {
+            instance.CommitTransaction();
+        }
+    }
+
+    public async Task CommitTransactionsAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var instance in Instances)
+        {
+            await instance.CommitTransactionAsync(cancellationToken);
+        }
+    }
+
+    #endregion
+
+    #region RollbackTransactions
+
+    public void RollbackTransactions()
+    {
+        foreach (var instance in Instances)
+        {
+            instance.RollbackTransaction();
+        }
+    }
+
+    public async Task RollbackTransactionsAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var instance in Instances)
+        {
+            await instance.RollbackTransactionAsync(cancellationToken);
+        }
+    }
+
+    #endregion
 }

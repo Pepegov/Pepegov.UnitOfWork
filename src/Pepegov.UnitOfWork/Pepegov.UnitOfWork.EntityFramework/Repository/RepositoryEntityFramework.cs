@@ -1,11 +1,16 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Pepegov.UnitOfWork.Entityes;
-using Pepegov.UnitOfWork.EntityFramework.DatabaseContext;
+using Pepegov.UnitOfWork.EntityFramework.Database;
 using Pepegov.UnitOfWork.Extensions;
 using Pepegov.UnitOfWork.Search.FuzzySearch;
 
@@ -819,13 +824,4 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
     public void Delete(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
     
     #endregion
-}
-
-public static class PagedList
-{
-    public static IPagedList<T> Empty<T>() => new PagedList<T>();
-
-    public static IPagedList<TResult> From<TResult, TSource>(IPagedList<TSource> source,
-        Func<IEnumerable<TSource>, IEnumerable<TResult>> converter) =>
-        new PagedList<TSource, TResult>(source, converter);
 }

@@ -1,14 +1,43 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+using Pepegov.UnitOfWork.Entityes;
 
 namespace Pepegov.UnitOfWork.Repository;
 
 public interface IRepositoryLinq<TEntity> : IRepository<TEntity> where TEntity : class
 {
+    #region Paged
+
+    IPagedList<TEntity> GetPagedList(
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int pageIndex = 0,
+        int pageSize = 20);
+
+    Task<IPagedList<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int pageIndex = 0,
+        int pageSize = 20,
+        CancellationToken cancellationToken = default);
+
+    IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int pageIndex = 0,
+        int pageSize = 20) 
+        where TResult : class;
+
+    Task<IPagedList<TResult>> GetPagedListAsync<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int pageIndex = 0,
+        int pageSize = 20,
+        CancellationToken cancellationToken = default)
+        where TResult : class;
+
+    #endregion
+    
     #region GetFirstOrDefault
     
     TEntity? GetFirstOrDefault(

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Pepegov.UnitOfWork.Entityes;
-using Pepegov.UnitOfWork.Exceptions;
 using Pepegov.UnitOfWork.Extensions;
 using Pepegov.UnitOfWork.MongoDb.Database;
 using Pepegov.UnitOfWork.Repository;
@@ -229,6 +222,88 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
         #region PagedList
 
+        public IPagedList<TDocument> GetPagedList(
+            Expression<Func<TDocument, bool>>? predicate = null, 
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null, 
+            int pageIndex = 0, 
+            int pageSize = 20)
+        {
+            IMongoQueryable<TDocument> query = Collection.AsQueryable();
+            
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+            
+            return orderBy is not null
+                ? orderBy(query).ToPagedList(pageIndex, pageSize)
+                : query.ToPagedList(pageIndex, pageSize);
+        }
+
+        public Task<IPagedList<TDocument>> GetPagedListAsync(
+            Expression<Func<TDocument, bool>>? predicate = null, 
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null,
+            int pageIndex = 0, 
+            int pageSize = 20,
+            CancellationToken cancellationToken = default)
+        {
+            IMongoQueryable<TDocument> query = Collection.AsQueryable();
+            
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+            
+            return orderBy is not null
+                ? orderBy(query).ToPagedListAsync(pageIndex, pageSize, cancellationToken: cancellationToken)
+                : query.ToPagedListAsync(pageIndex, pageSize, cancellationToken: cancellationToken);
+        }
+
+        public IPagedList<TResult> GetPagedList<TResult>(
+            Expression<Func<TDocument, TResult>> selector, 
+            Expression<Func<TDocument, bool>>? predicate = null, 
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null,
+            int pageIndex = 0, int pageSize = 20) 
+            where TResult : class
+        {
+            IMongoQueryable<TDocument> query = Collection.AsQueryable();
+            
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+            
+            return orderBy is not null
+                ? orderBy(query).Select(selector).ToPagedList(pageIndex, pageSize)
+                : query.Select(selector).ToPagedList(pageIndex, pageSize);
+        }
+
+        public Task<IPagedList<TResult>> GetPagedListAsync<TResult>(
+            Expression<Func<TDocument, TResult>> selector, 
+            Expression<Func<TDocument, bool>>? predicate = null, 
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null,
+            int pageIndex = 0, 
+            int pageSize = 20, 
+            CancellationToken cancellationToken = default) 
+            where TResult : class
+        {
+            IMongoQueryable<TDocument> query = Collection.AsQueryable();
+            
+            if (predicate is not null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).Select(selector).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
+            }
+            else
+            {
+                return query.Select(selector).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
+            }
+        }
+        
         /// <summary> Returns paged collection of the items </summary>
         /// <remarks>Pagination for MongoDB is using AggregateFacet</remarks>
         /// <param name="pageSize"></param>

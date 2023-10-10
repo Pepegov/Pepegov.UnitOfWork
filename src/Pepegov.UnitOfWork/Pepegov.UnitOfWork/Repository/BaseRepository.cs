@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Pepegov.UnitOfWork.Exceptions;
 
 namespace Pepegov.UnitOfWork.Repository;
@@ -46,7 +47,18 @@ public abstract class BaseRepository<TEntity> where TEntity : class
     
     private string GetInternalName()
     {
-        var name = _collectionNameSelector.GetCollectionName(typeof(TEntity).Name);
+        var entityType = typeof(TEntity);
+        var entityName = new StringBuilder(entityType.Name);
+        if (entityType.IsGenericType)
+        {
+            foreach (var genericArgument in entityType.GetGenericArguments())
+            {
+                entityName.Append(genericArgument.Name);
+            }
+        }
+        entityName.Replace("`1", "");
+
+        var name = _collectionNameSelector.GetCollectionName(entityName.ToString());
         return string.IsNullOrEmpty(name)
             ? throw new UnitOfWorkArgumentNullException($"Cannot read type name from entity in ICollectionNameSelector.GetMongoCollectionName. Argument is NULL: {nameof(name)}")
             : name;

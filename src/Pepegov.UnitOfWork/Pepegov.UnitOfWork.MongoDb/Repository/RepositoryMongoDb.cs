@@ -311,7 +311,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
         /// <param name="sorting"></param>
         /// <param name="cancellationToken"></param>
         /// <param name="pageIndex"></param>
-        public async Task<IPagedList<TDocument>> GetPagedAsync
+        public async Task<IPagedList<TDocument>> GetPagedListAsync
         (
             int pageIndex,
             int pageSize,

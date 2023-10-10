@@ -56,7 +56,7 @@ public interface IRepositoryMongo<TDocument> : IRepositoryLinq<TDocument>
     /// <param name="sorting"></param>
     /// <param name="cancellationToken"></param>
     /// <param name="pageIndex"></param>
-    Task<IPagedList<TDocument>> GetPagedAsync(
+    Task<IPagedList<TDocument>> GetPagedListAsync(
         int pageIndex,
         int pageSize,
         FilterDefinition<TDocument> filter,

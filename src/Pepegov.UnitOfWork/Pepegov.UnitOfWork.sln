@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepegov.UnitOfWork.MongoDb.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdoNet", "AdoNet", "{9496B80C-7784-449A-8C7A-265762D89A11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepegov.UnitOfWork.Test", "Pepegov.UnitOfWork.Test\Pepegov.UnitOfWork.Test.csproj", "{70B3B7AF-829F-4BB8-8137-09149B3D76EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{2A8229E1-977C-4FE7-B57C-03DEE6C747F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A8229E1-977C-4FE7-B57C-03DEE6C747F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A8229E1-977C-4FE7-B57C-03DEE6C747F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B3B7AF-829F-4BB8-8137-09149B3D76EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B3B7AF-829F-4BB8-8137-09149B3D76EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B3B7AF-829F-4BB8-8137-09149B3D76EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B3B7AF-829F-4BB8-8137-09149B3D76EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FFE9D587-97B2-4F30-A490-211569D92AAB} = {8369913B-9668-41AB-807C-67B6F4D23784}

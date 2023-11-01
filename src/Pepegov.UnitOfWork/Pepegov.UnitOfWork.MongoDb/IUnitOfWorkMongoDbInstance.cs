@@ -95,7 +95,7 @@ public interface IUnitOfWorkMongoInstance : IUnitOfWorkInstance, IRepositoryMong
     /// Ensures that the MongoDb replica set enabled.
     /// Warning: Do not use this method on the production.
     /// </summary>
-    bool EnsureReplicationSetReady();
-
+    bool IsEnsureTransactionReady();
+    Task<bool> IsEnsureTransactionReadyAsync(CancellationToken cancellationToken = default);
 }
 

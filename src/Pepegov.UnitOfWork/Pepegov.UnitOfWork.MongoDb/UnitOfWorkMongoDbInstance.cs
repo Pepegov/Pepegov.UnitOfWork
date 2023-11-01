@@ -17,13 +17,11 @@ public sealed class UnitOfWorkMongoDbInstance : BaseUnitOfWorkInstance, IUnitOfW
 {
     private readonly ILogger<IUnitOfWorkMongoInstance> _logger;
     private readonly ICollectionNameSelector _collectionNameSelector;
-    private readonly bool _canHaveMongoDbTransactions;
     private bool _disposed;
     private Dictionary<Type, object>? _repositories;
 
     public UnitOfWorkMongoDbInstance(
         ILogger<IUnitOfWorkMongoInstance> logger,
-        ILogger<IMongoDatabaseContext> loggerContext,
         ICollectionNameSelector collectionNameSelector,
         IMongoDatabaseContext databaseContext) : base(databaseContext)
     {
@@ -313,10 +311,16 @@ public sealed class UnitOfWorkMongoDbInstance : BaseUnitOfWorkInstance, IUnitOfW
     /// <summary>
     /// Tests that a transaction available in MongoDb replica set
     /// </summary>
-    public bool EnsureReplicationSetReady()
+    public bool IsEnsureTransactionReady()
     {
-        var result=  (DatabaseContext as IMongoDatabaseContext)?.MongoDatabase.Client.EnsureReplicationSetReady();
+        var result=  (DatabaseContext as IMongoDatabaseContext)?.MongoDatabase.Client.IsEnsureTransactionReady();
         ArgumentNullException.ThrowIfNull(result);
         return (bool)result;
+    }
+    
+    public async Task<bool> IsEnsureTransactionReadyAsync(CancellationToken cancellationToken = default)
+    {
+        var result= await (DatabaseContext as IMongoDatabaseContext)?.MongoDatabase.Client.IsEnsureTransactionReadyAsync(cancellationToken)!;
+        return result;
     }
 }

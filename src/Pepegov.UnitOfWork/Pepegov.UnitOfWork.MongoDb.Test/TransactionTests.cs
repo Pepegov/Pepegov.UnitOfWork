@@ -13,7 +13,7 @@ public class TransactionTests
     {
         _mongoInstance = TestHelper.GetUnitOfWorkMongoDbInstanceWithReplica;
         _mongoTransactionNotSupportedInstance = TestHelper.GetUnitOfWorkMongoDbInstanceStandard;
-        if (!_mongoInstance.EnsureReplicationSetReady())
+        if (!_mongoInstance.IsEnsureTransactionReady())
         {
             throw new UnitOfWorkTransactionNotSupported();
         }

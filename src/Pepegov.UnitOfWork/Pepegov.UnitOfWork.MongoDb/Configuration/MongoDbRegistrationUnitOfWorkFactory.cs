@@ -1,8 +1,6 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pepegov.UnitOfWork.Configuration;
-using Pepegov.UnitOfWork.MongoDb.Database;
 
 namespace Pepegov.UnitOfWork.MongoDb.Configuration;
 
@@ -27,13 +25,6 @@ public class MongoDbRegistrationUnitOfWorkFactory : IRegistrationUnitOfWorkFacto
             loggerInstance = LoggerFactory.Create(builder => builder.AddConsole())
                 .CreateLogger<IUnitOfWorkMongoInstance>();
         }
-        
-        var loggerContext = context.GetService<ILogger<IMongoDatabaseContext>>();
-        if (loggerContext is null)
-        {
-            loggerContext = LoggerFactory.Create(builder => builder.AddConsole())
-                .CreateLogger<IMongoDatabaseContext>();
-        }
 
         var collectionNameSelector = context.GetService<ICollectionNameSelector>();
         if (collectionNameSelector is null)
@@ -41,7 +32,7 @@ public class MongoDbRegistrationUnitOfWorkFactory : IRegistrationUnitOfWorkFacto
             collectionNameSelector = new DefaultCollectionNameSelector();
         }
         
-        var instance = new UnitOfWorkMongoDbInstance(loggerInstance, loggerContext, collectionNameSelector, configurator.MongoDatabaseContext);
+        var instance = new UnitOfWorkMongoDbInstance(loggerInstance, collectionNameSelector, configurator.MongoDatabaseContext);
 
         return instance;
     }

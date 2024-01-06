@@ -192,21 +192,20 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         return orderBy is null ? listResult : orderBy(listResult).ToList();
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(bool disableTracking = true)
+    public async Task<IList<TEntity>> GetAllAsync(bool disableTracking = true, CancellationToken cancellationToken = default)
         => disableTracking
-            ? await _dbSet.AsNoTracking().ToListAsync()
-            : await _dbSet.ToListAsync();
-
+            ? await _dbSet.AsNoTracking().ToListAsync(cancellationToken: cancellationToken)
+            : await _dbSet.ToListAsync(cancellationToken: cancellationToken);
     public async Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true) =>
+        bool disableTracking = true, CancellationToken cancellationToken = default) =>
         disableTracking
-            ? await _dbSet.AsNoTracking().Select(selector).ToListAsync()
-            : await _dbSet.Select(selector).ToListAsync();
+            ? await _dbSet.AsNoTracking().Select(selector).ToListAsync(cancellationToken: cancellationToken)
+            : await _dbSet.Select(selector).ToListAsync(cancellationToken: cancellationToken);
 
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        bool disableTracking = true, bool ignoreQueryFilters = false)
+        bool disableTracking = true, bool ignoreQueryFilters = false, CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -232,10 +231,10 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
 
         if (orderBy is not null)
         {
-            return await orderBy(query).ToListAsync();
+            return await orderBy(query).ToListAsync(cancellationToken: cancellationToken);
         }
 
-        return await query.ToListAsync();
+        return await query.ToListAsync(cancellationToken: cancellationToken);
     }
 
     public async Task<IList<TResult>> GetAllAsync<TResult>(
@@ -243,7 +242,7 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        bool disableTracking = true, bool ignoreQueryFilters = false)
+        bool disableTracking = true, bool ignoreQueryFilters = false, CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -268,8 +267,8 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         }
 
         return orderBy is not null
-            ? await orderBy(query).Select(selector).ToListAsync()
-            : await query.Select(selector).ToListAsync();
+            ? await orderBy(query).Select(selector).ToListAsync(cancellationToken: cancellationToken)
+            : await query.Select(selector).ToListAsync(cancellationToken: cancellationToken);
     }
 
     #endregion
@@ -529,7 +528,8 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false)
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -554,8 +554,8 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         }
 
         return orderBy is not null
-            ? await orderBy(query).FirstOrDefaultAsync()
-            : await query.FirstOrDefaultAsync();
+            ? await orderBy(query).FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            : await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
     public TResult? GetFirstOrDefault<TResult>(
@@ -597,7 +597,7 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        bool disableTracking = true, bool ignoreQueryFilters = false)
+        bool disableTracking = true, bool ignoreQueryFilters = false, CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -622,8 +622,8 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         }
 
         return orderBy is not null
-            ? await orderBy(query).Select(selector).FirstOrDefaultAsync()
-            : await query.Select(selector).FirstOrDefaultAsync();
+            ? await orderBy(query).Select(selector).FirstOrDefaultAsync(cancellationToken: cancellationToken)
+            : await query.Select(selector).FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
     #endregion

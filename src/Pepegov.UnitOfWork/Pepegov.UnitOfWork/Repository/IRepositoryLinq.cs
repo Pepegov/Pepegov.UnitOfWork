@@ -46,7 +46,8 @@ public interface IRepositoryLinq<TEntity> : IRepository<TEntity> where TEntity :
 
     Task<TEntity?> GetFirstOrDefaultAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+        CancellationToken cancellationToken = default);
     
     #endregion
     
@@ -70,19 +71,22 @@ public interface IRepositoryLinq<TEntity> : IRepository<TEntity> where TEntity :
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
 
-    Task<IList<TEntity>> GetAllAsync();
+    Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
     Task<IList<TResult>> GetAllAsync<TResult>(
-        Expression<Func<TEntity, TResult>> selector);
+        Expression<Func<TEntity, TResult>> selector,
+        CancellationToken cancellationToken = default);
 
     Task<IList<TEntity>> GetAllAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        CancellationToken cancellationToken = default);
 
     Task<IList<TResult>> GetAllAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        CancellationToken cancellationToken = default);
 
 
     Task<IList<TEntity>> GetAllWithFuzzySearchAsync(

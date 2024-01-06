@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
@@ -94,13 +89,15 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
 
     Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -142,18 +139,18 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
         bool disableTracking = true,
         bool ignoreQueryFilters = false);
 
-    Task<IList<TEntity>> GetAllAsync(bool disableTracking = true);
+    Task<IList<TEntity>> GetAllAsync(bool disableTracking = true, CancellationToken cancellationToken = default);
 
     Task<IList<TResult>> GetAllAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true);
+        bool disableTracking = true, CancellationToken cancellationToken = default);
 
     Task<IList<TEntity>> GetAllAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false, CancellationToken cancellationToken = default);
 
     Task<IList<TResult>> GetAllAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
@@ -161,7 +158,7 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool disableTracking = true,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false, CancellationToken cancellationToken = default);
 
 
     Task<IList<TEntity>> GetAllWithFuzzySearchAsync(

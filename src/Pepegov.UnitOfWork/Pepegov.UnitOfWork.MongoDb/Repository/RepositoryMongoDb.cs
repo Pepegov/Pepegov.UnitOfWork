@@ -114,7 +114,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
         #endregion
 
-        //test this region
+        //TODO test this region
         #region Find
         
         public TDocument? Find(params object[] keyValues)
@@ -374,7 +374,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
         }
 
         public async Task<TDocument?> GetFirstOrDefaultAsync(Expression<Func<TDocument, bool>>? predicate = null, 
-            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null)
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null, CancellationToken cancellationToken = default)
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
             
@@ -385,7 +385,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
             return orderBy is not null
                 ? orderBy(query).FirstOrDefault()!
-                : await query.FirstOrDefaultAsync();
+                : await query.FirstOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
         #endregion
@@ -451,22 +451,22 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
                 : query.Select(selector);
         }
 
-        public async Task<IList<TDocument>> GetAllAsync()
+        public async Task<IList<TDocument>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
-            return await query.ToListAsync();
+            return await query.ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<IList<TResult>> GetAllAsync<TResult>(
-            Expression<Func<TDocument, TResult>> selector)
+            Expression<Func<TDocument, TResult>> selector, CancellationToken cancellationToken = default)
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
-            return await query.Select(selector).ToListAsync();
+            return await query.Select(selector).ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<IList<TDocument>> GetAllAsync(
             Expression<Func<TDocument, bool>>? predicate = null, 
-            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null)
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null, CancellationToken cancellationToken = default)
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
             
@@ -480,13 +480,13 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
                 return orderBy(query).ToList();
             }
 
-            return await query.ToListAsync();
+            return await query.ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<IList<TResult>> GetAllAsync<TResult>(
             Expression<Func<TDocument, TResult>> selector, 
             Expression<Func<TDocument, bool>>? predicate = null, 
-            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null)
+            Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null, CancellationToken cancellationToken = default)
         {
             IMongoQueryable<TDocument> query = Collection.AsQueryable();
             
@@ -497,7 +497,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository
 
             return orderBy is not null
                 ? orderBy(query).Select(selector).ToList()
-                : await query.Select(selector).ToListAsync();
+                : await query.Select(selector).ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<IList<TDocument>> GetAllWithFuzzySearchAsync(string searchQuery, Func<TDocument, string> searchProperty, Expression<Func<TDocument, bool>>? predicate = null,

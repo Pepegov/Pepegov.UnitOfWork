@@ -113,16 +113,18 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     #region GetAll
 
-    IQueryable<TEntity> GetAll(bool disableTracking = true);
+    IQueryable<TEntity> GetAll(bool disableTracking = true, bool ignoreQueryFilters = false);
 
     IQueryable<TResult> GetAll<TResult>(
         Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true);
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false);
 
     IQueryable<TResult> GetAll<TResult>(
         Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        bool disableTracking = true);
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false);
 
     IQueryable<TEntity> GetAll(
         Expression<Func<TEntity, bool>>? predicate = null,
@@ -139,11 +141,16 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
         bool disableTracking = true,
         bool ignoreQueryFilters = false);
 
-    Task<IList<TEntity>> GetAllAsync(bool disableTracking = true, CancellationToken cancellationToken = default);
+    Task<IList<TEntity>> GetAllAsync(
+        bool disableTracking = true, 
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
 
     Task<IList<TResult>> GetAllAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true, CancellationToken cancellationToken = default);
+        bool disableTracking = true, 
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
 
     Task<IList<TEntity>> GetAllAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
@@ -214,23 +221,28 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     #region Count
 
-    int Count(Expression<Func<TEntity, bool>>? predicate = null);
+    int Count(Expression<Func<TEntity, bool>>? predicate = null, 
+        bool ignoreQueryFilters = false);
 
-    Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null,
+    Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null, 
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
-    long LongCount(Expression<Func<TEntity, bool>>? predicate = null);
+    long LongCount(Expression<Func<TEntity, bool>>? predicate = null, 
+        bool ignoreQueryFilters = false);
 
     Task<long> LongCountAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
     #endregion
 
     #region Exist
 
-    bool Exists(Expression<Func<TEntity, bool>>? predicate = null);
+    bool Exists(Expression<Func<TEntity, bool>>? predicate = null, bool ignoreQueryFilters = false);
 
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? selector = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
     #endregion
@@ -239,11 +251,13 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     public T? Max<T>(
         Expression<Func<TEntity, T>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false);
 
     public Task<T> MaxAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
     #endregion
@@ -252,11 +266,13 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     public T? Min<T>(
         Expression<Func<TEntity, T>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false);
     
     public Task<T> MinAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
     #endregion
@@ -265,11 +281,13 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     public decimal Average(
         Expression<Func<TEntity, decimal>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false);
     
     public Task<decimal> AverageAsync(
         Expression<Func<TEntity, decimal>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
     
     #endregion
@@ -278,11 +296,13 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> wher
 
     public decimal Sum(
         Expression<Func<TEntity, decimal>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false);
     
     public Task<decimal> SumAsync(
         Expression<Func<TEntity, decimal>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
     #endregion

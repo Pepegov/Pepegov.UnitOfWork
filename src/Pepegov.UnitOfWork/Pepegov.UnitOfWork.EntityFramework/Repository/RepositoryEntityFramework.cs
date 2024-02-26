@@ -38,24 +38,51 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         }
     }
 
-    #region GetAll 
-    
-    public IQueryable<TEntity> GetAll(bool disableTracking = true) =>
-        disableTracking
-            ? _dbSet.AsNoTracking()
-            : _dbSet;
+    #region GetAll
+
+    public IQueryable<TEntity> GetAll(bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return query;
+    }
 
     public IQueryable<TResult> GetAll<TResult>(
         Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true) =>
-        disableTracking
-            ? _dbSet.AsNoTracking().Select(selector)
-            : _dbSet.Select(selector);
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return query.Select(selector);
+    }
+        
 
     public IQueryable<TResult> GetAll<TResult>(
         Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        bool disableTracking = true)
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -67,6 +94,11 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         if (predicate is not null)
         {
             query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
         }
 
         return query.Select(selector);
@@ -192,15 +224,44 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
         return orderBy is null ? listResult : orderBy(listResult).ToList();
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(bool disableTracking = true, CancellationToken cancellationToken = default)
-        => disableTracking
-            ? await _dbSet.AsNoTracking().ToListAsync(cancellationToken: cancellationToken)
-            : await _dbSet.ToListAsync(cancellationToken: cancellationToken);
-    public async Task<IList<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-        bool disableTracking = true, CancellationToken cancellationToken = default) =>
-        disableTracking
-            ? await _dbSet.AsNoTracking().Select(selector).ToListAsync(cancellationToken: cancellationToken)
-            : await _dbSet.Select(selector).ToListAsync(cancellationToken: cancellationToken);
+    public async Task<IList<TEntity>> GetAllAsync(bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return await query.ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<IList<TResult>> GetAllAsync<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return await query.Select(selector).ToListAsync(cancellationToken: cancellationToken);
+    }
 
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
@@ -641,45 +702,102 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
 
     #region Count
 
-    public int Count(Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Count()
-            : _dbSet.Count(predicate);
+    public int Count(Expression<Func<TEntity, bool>>? predicate = null, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return predicate is null
+            ? query.Count()
+            : query.Count(predicate);;
+    }
 
     public async Task<int> CountAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? await _dbSet.CountAsync(cancellationToken)
-            : await _dbSet.CountAsync(predicate, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return predicate is null
+            ? await query.CountAsync(cancellationToken)
+            : await query.CountAsync(predicate, cancellationToken);
+    }
 
-    public long LongCount(Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.LongCount()
-            : _dbSet.LongCount(predicate);
+    public long LongCount(Expression<Func<TEntity, bool>>? predicate = null, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return predicate is null
+            ? query.LongCount()
+            : query.LongCount(predicate);
+    }
 
     public async Task<long> LongCountAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? await _dbSet.LongCountAsync(cancellationToken)
-            : await _dbSet.LongCountAsync(predicate, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return predicate is null
+            ? await query.LongCountAsync(cancellationToken)
+            : await query.LongCountAsync(predicate, cancellationToken);
+    }
 
     #endregion
 
     #region Exist
 
-    public bool Exists(Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Any()
-            : _dbSet.Any(predicate);
+    public bool Exists(Expression<Func<TEntity, bool>>? predicate = null, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return predicate is null
+            ? query.Any()
+            : query.Any(predicate);
+    }
 
     public async Task<bool> ExistsAsync(
         Expression<Func<TEntity, bool>>? selector = null,
-        CancellationToken cancellationToken = default) =>
-        selector is null
-            ? await _dbSet.AnyAsync(cancellationToken)
-            : await _dbSet.AnyAsync(selector, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return selector is null
+            ? await query.AnyAsync(cancellationToken)
+            : await query.AnyAsync(selector, cancellationToken);
+    }
 
     #endregion
 
@@ -687,37 +805,77 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
 
     public T? Max<T>(
         Expression<Func<TEntity, T>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Max(selector)
-            : _dbSet.Where(predicate).Max(selector);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return predicate is null
+            ? query.Max(selector)
+            : query.Where(predicate).Max(selector);
+    }
 
     public Task<T> MaxAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? _dbSet.MaxAsync(selector, cancellationToken)
-            : _dbSet.Where(predicate).MaxAsync(selector, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        return predicate is null
+            ? query.MaxAsync(selector, cancellationToken)
+            : query.Where(predicate).MaxAsync(selector, cancellationToken);
+    }
 
     #endregion
 
     #region Min
-    
+
     public T? Min<T>(
         Expression<Func<TEntity, T>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Min(selector)
-            : _dbSet.Where(predicate).Min(selector);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.Min(selector)
+            : query.Where(predicate).Min(selector);
+    }
 
     public Task<T> MinAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? _dbSet.MinAsync(selector, cancellationToken)
-            : _dbSet.Where(predicate).MinAsync(selector, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.MinAsync(selector, cancellationToken)
+            : query.Where(predicate).MinAsync(selector, cancellationToken);
+    }
 
     #endregion
 
@@ -725,18 +883,38 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
 
     public decimal Average(
         Expression<Func<TEntity, decimal>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Average(selector)
-            : _dbSet.Where(predicate).Average(selector);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.Average(selector)
+            : query.Where(predicate).Average(selector);
+    }
 
     public Task<decimal> AverageAsync(
         Expression<Func<TEntity, decimal>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? _dbSet.AverageAsync(selector, cancellationToken)
-            : _dbSet.Where(predicate).AverageAsync(selector, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.AverageAsync(selector, cancellationToken)
+            : query.Where(predicate).AverageAsync(selector, cancellationToken);
+    }
 
     #endregion
 
@@ -744,18 +922,38 @@ public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEn
 
     public decimal Sum(
         Expression<Func<TEntity, decimal>> selector,
-        Expression<Func<TEntity, bool>>? predicate = null) =>
-        predicate is null
-            ? _dbSet.Sum(selector)
-            : _dbSet.Where(predicate).Sum(selector);
+        Expression<Func<TEntity, bool>>? predicate = null,
+        bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.Sum(selector)
+            : query.Where(predicate).Sum(selector);
+    }
 
     public Task<decimal> SumAsync(
         Expression<Func<TEntity, decimal>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
-        CancellationToken cancellationToken = default) =>
-        predicate is null
-            ? _dbSet.SumAsync(selector, cancellationToken)
-            : _dbSet.Where(predicate).SumAsync(selector, cancellationToken);
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }   
+        
+        return predicate is null
+            ? query.SumAsync(selector, cancellationToken)
+            : query.Where(predicate).SumAsync(selector, cancellationToken);
+    }
 
     #endregion
 

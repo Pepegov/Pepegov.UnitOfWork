@@ -7,7 +7,7 @@ using Pepegov.UnitOfWork.Repository;
 
 namespace Pepegov.UnitOfWork.EntityFramework.Repository;
 
-public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity> where TEntity : class
+public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRepositoryQueryableExpression<TEntity>, IRepositoryQueryableEntityFramework<TEntity> where TEntity : class
 {
     #region Paged
 

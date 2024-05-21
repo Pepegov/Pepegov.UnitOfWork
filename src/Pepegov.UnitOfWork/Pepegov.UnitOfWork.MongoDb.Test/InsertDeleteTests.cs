@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Pepegov.UnitOfWork.MongoDb.Configuration;
-using Pepegov.UnitOfWork.MongoDb.Database;
 using Pepegov.UnitOfWork.MongoDb.Test.Entityes;
 
 namespace Pepegov.UnitOfWork.MongoDb.Test;

@@ -3,7 +3,7 @@ using Pepegov.UnitOfWork.Entityes;
 
 namespace Pepegov.UnitOfWork.Repository;
 
-public interface IRepositoryLinq<TEntity> : IRepository<TEntity> where TEntity : class
+public interface IRepositoryQueryableExpression<TEntity> : IRepository<TEntity> where TEntity : class
 {
     #region Paged
 
@@ -87,15 +87,6 @@ public interface IRepositoryLinq<TEntity> : IRepository<TEntity> where TEntity :
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         CancellationToken cancellationToken = default);
-
-
-    Task<IList<TEntity>> GetAllWithFuzzySearchAsync(
-        string searchQuery,
-        Func<TEntity, string> searchProperty,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        int allowedMistakeDistance = 300);
-    
 
     #endregion
 

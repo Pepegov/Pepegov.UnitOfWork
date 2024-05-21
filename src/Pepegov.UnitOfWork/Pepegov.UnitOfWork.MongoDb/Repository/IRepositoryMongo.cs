@@ -11,8 +11,7 @@ namespace Pepegov.UnitOfWork.MongoDb.Repository;
 /// Defines the interfaces for generic repository.
 /// </summary>
 /// <typeparam name="TDocument">The type of the entity.</typeparam>
-/// <typeparam name="TType"></typeparam>
-public interface IRepositoryMongo<TDocument> : IRepositoryLinq<TDocument>
+public interface IRepositoryMongo<TDocument> : IRepository<TDocument>, IRepositoryQueryable<TDocument>, IRepositoryQueryableExpression<TDocument> 
     where TDocument : class
 {
     #region MongoDb base

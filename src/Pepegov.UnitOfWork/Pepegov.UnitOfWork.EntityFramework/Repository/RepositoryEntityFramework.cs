@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -16,7 +11,7 @@ using Pepegov.UnitOfWork.Search.FuzzySearch;
 
 namespace Pepegov.UnitOfWork.EntityFramework.Repository;
 
-public class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEntity> where TEntity : class
+public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFramework<TEntity> where TEntity : class
 {
     private readonly IEntityFrameworkDatabaseContext _databaseContext;
     private readonly DbSet<TEntity> _dbSet;

@@ -11,6 +11,15 @@ namespace Pepegov.UnitOfWork.EntityFramework.Test;
 public class ConfigurationTests
 {
     private IServiceProvider _serviceProvider;
+
+    [TearDown]
+    public void TearDown()
+    {
+        if (_serviceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        } 
+    }
     
     [SetUp]
     public void Setup()

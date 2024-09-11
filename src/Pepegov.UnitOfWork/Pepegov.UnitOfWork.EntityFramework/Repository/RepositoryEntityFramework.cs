@@ -25,14 +25,6 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
 
     public void ChangeEntityState(TEntity entity, EntityState state) => _databaseContext.DbContext.Entry(entity).State = state;
 
-    public void ChangeTable(string table)
-    {
-        if (_databaseContext.DbContext.Model.FindEntityType(typeof(TEntity)) is IConventionEntityType relational)
-        {
-            relational.SetTableName(table);
-        }
-    }
-
     #region GetAll
 
     public IQueryable<TEntity> GetAll(bool disableTracking = true, bool ignoreQueryFilters = false)

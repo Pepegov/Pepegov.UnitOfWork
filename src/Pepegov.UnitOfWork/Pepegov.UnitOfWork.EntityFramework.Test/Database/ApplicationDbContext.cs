@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //optionsBuilder.UseSqlite("Data Source=ef.test.sqlite");
-        optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=qweQWE123;Database=Pepegov.UnitOfWork.Test");
+        //optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=qweQWE123;Database=Pepegov.UnitOfWork.Test");
         base.OnConfiguring(optionsBuilder);
     }
 

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Pepegov.UnitOfWork.Configuration;
 using Pepegov.UnitOfWork.Exceptions;

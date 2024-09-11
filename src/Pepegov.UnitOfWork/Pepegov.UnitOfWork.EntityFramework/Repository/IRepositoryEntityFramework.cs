@@ -308,6 +308,4 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRe
     #endregion
 
     void ChangeEntityState(TEntity entity, EntityState state);
-
-    void ChangeTable(string table);
 }

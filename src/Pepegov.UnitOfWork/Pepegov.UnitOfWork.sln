@@ -20,6 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdoNet", "AdoNet", "{9496B8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepegov.UnitOfWork.Test", "Pepegov.UnitOfWork.Test\Pepegov.UnitOfWork.Test.csproj", "{70B3B7AF-829F-4BB8-8137-09149B3D76EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.SolutionFolder", "1.SolutionFolder", "{E686D11B-C469-453B-BCA6-508851C3E074}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.github\workflows\main.yml = ..\..\.github\workflows\main.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

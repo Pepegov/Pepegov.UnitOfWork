@@ -8,6 +8,12 @@ namespace Pepegov.UnitOfWork.EntityFramework.Test;
 public class InsertDeleteTests
 {
     private IUnitOfWorkEntityFrameworkInstance entityFrameworkInstance;
+
+    [TearDown]
+    public void TearDown()
+    {
+        entityFrameworkInstance.Dispose();
+    }
     
     [SetUp]
     public async Task Setup()

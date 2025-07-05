@@ -1009,4 +1009,352 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
     public void Delete(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
     
     #endregion
+    
+    #region Take
+
+    public IList<TEntity> Take(
+        int count, int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        query = query.Take(count);
+        
+        return orderBy is not null ? orderBy(query).ToList() : query.ToList();
+    }
+
+    public async Task<IList<TEntity>> TakeAsync(
+        int count, int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.Take(count);
+        
+        return orderBy is not null ? await orderBy(query).ToListAsync(cancellationToken) : await query.ToListAsync(cancellationToken);
+    }
+
+    public IList<TResult> Take<TResult>(
+        int count, 
+        Expression<Func<TEntity, TResult>> selector, 
+        int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+        
+        query = query.Take(count);
+        
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return query.Select(selector).ToList();
+    }
+
+    public async Task<IList<TResult>> TakeAsync<TResult>(
+        int count, 
+        Expression<Func<TEntity, TResult>> selector, 
+        int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.Take(count);
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return await query.Select(selector).ToListAsync(cancellationToken);
+    }
+
+    public IList<TEntity> TakeLast(
+        int count, int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.TakeLast(count);
+        
+        return orderBy is not null ? orderBy(query).ToList() : query.ToList();
+    }
+
+    public async Task<IList<TEntity>> TakeLastAsync(
+        int count, int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.TakeLast(count);
+        
+        return orderBy is not null ? await orderBy(query).ToListAsync(cancellationToken) : await query.ToListAsync(cancellationToken);
+    }
+
+    public IList<TResult> TakeLast<TResult>(
+        int count, 
+        Expression<Func<TEntity, TResult>> selector, 
+        int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.TakeLast(count);
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return query.Select(selector).ToList();
+    }
+
+    public async Task<IList<TResult>> TakeLastAsync<TResult>(
+        int count, 
+        Expression<Func<TEntity, TResult>> selector, 
+        int? skip = null, 
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false, 
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (disableTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (include is not null)
+        {
+            query = include(query);
+        }
+        
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        query = query.TakeLast(count);
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return await query.Select(selector).ToListAsync(cancellationToken);
+    }
+
+    #endregion
 }

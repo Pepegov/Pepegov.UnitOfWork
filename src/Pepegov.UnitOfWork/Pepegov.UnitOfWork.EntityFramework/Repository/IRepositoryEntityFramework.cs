@@ -307,5 +307,78 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRe
 
     #endregion
 
+    #region Take
+
+    public IList<TEntity> Take(
+        int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false);
+    
+    public Task<IList<TEntity>> TakeAsync(int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+    
+    public IList<TResult> Take<TResult>(
+        int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false);
+    
+    public Task<IList<TResult>> TakeAsync<TResult>(int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+
+    public IList<TEntity> TakeLast(
+        int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false);
+    
+    public Task<IList<TEntity>> TakeLastAsync(int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+    
+    public IList<TResult> TakeLast<TResult>(
+        int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false);
+    
+    public Task<IList<TResult>> TakeLastAsync<TResult>(int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true, bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+
+    
+    #endregion
+    
     void ChangeEntityState(TEntity entity, EntityState state);
 }

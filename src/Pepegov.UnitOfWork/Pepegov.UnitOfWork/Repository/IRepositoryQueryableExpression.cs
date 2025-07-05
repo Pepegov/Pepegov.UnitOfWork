@@ -164,4 +164,34 @@ public interface IRepositoryQueryableExpression<TEntity> : IRepository<TEntity> 
         CancellationToken cancellationToken = default);
 
     #endregion
+    
+    #region Take
+
+    public IList<TEntity> Take(
+        int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
+    
+    public Task<IList<TEntity>> TakeAsync(int count,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        CancellationToken cancellationToken = default);
+    
+    public IList<TResult> Take<TResult>(
+        int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
+    
+    public Task<IList<TResult>> TakeAsync<TResult>(int count,
+        Expression<Func<TEntity, TResult>> selector,
+        int? skip = null,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        CancellationToken cancellationToken = default);
+    
+    #endregion
 }

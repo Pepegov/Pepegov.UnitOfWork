@@ -370,4 +370,97 @@ public partial class RepositoryEntityFramework<TEntity> where TEntity : class
     }
 
     #endregion
+
+    #region Take
+
+    public IList<TEntity> Take(int count, int? skip = null, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+        
+        return orderBy is not null ? orderBy(query).ToList() : query.ToList();
+    }
+
+    public async Task<IList<TEntity>> TakeAsync(int count, int? skip = null, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+        
+        return orderBy is not null ? await orderBy(query).ToListAsync(cancellationToken) : await query.ToListAsync(cancellationToken);
+    }
+
+    public IList<TResult> Take<TResult>(int count, Expression<Func<TEntity, TResult>> selector, int? skip = null, Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return query.Select(selector).ToList();
+    }
+
+    public async Task<IList<TResult>> TakeAsync<TResult>(int count, Expression<Func<TEntity, TResult>> selector, int? skip = null, Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+
+        if (orderBy is not null)
+        {
+            query = orderBy(query);
+        }
+        
+        return await query.Select(selector).ToListAsync(cancellationToken);
+    }
+
+    #endregion
 }

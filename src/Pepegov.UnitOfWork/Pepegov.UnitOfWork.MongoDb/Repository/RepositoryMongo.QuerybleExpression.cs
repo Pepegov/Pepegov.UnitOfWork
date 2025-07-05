@@ -533,4 +533,87 @@ public partial class RepositoryMongo<TDocument>  where TDocument : class
     }
 
     #endregion
+    
+    #region Take
+
+    public IList<TDocument> Take(int count, int? skip = null, Expression<Func<TDocument, bool>>? predicate = null, Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null)
+    {
+        IMongoQueryable<TDocument> query = Collection.AsQueryable();
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+        
+        return orderBy is not null ? orderBy(query).ToList() : query.ToList();
+    }
+
+    public async Task<IList<TDocument>> TakeAsync(int count, int? skip = null, Expression<Func<TDocument, bool>>? predicate = null, Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null,
+        CancellationToken cancellationToken = default)
+    {
+        IMongoQueryable<TDocument> query = Collection.AsQueryable();
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+        
+        return orderBy is not null ? orderBy(query).ToList() : await query.ToListAsync(cancellationToken);
+    }
+
+    public IList<TResult> Take<TResult>(int count, Expression<Func<TDocument, TResult>> selector, int? skip = null, Expression<Func<TDocument, bool>>? predicate = null,
+        Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null)
+    {
+        IMongoQueryable<TDocument> query = Collection.AsQueryable();
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+
+        return orderBy is not null ? orderBy(query).Select(selector).ToList() : query.Select(selector).ToList();
+    }
+
+    public async Task<IList<TResult>> TakeAsync<TResult>(int count, Expression<Func<TDocument, TResult>> selector, int? skip = null, Expression<Func<TDocument, bool>>? predicate = null,
+        Func<IQueryable<TDocument>, IOrderedQueryable<TDocument>>? orderBy = null, CancellationToken cancellationToken = default)
+    {
+        IMongoQueryable<TDocument> query = Collection.AsQueryable();
+
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+        
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+
+        query = query.Take(count);
+
+        return orderBy is not null ? orderBy(query).Select(selector).ToList() : await query.Select(selector).ToListAsync(cancellationToken);
+    }
+    
+    #endregion
 }

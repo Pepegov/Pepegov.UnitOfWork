@@ -8,6 +8,7 @@ namespace Pepegov.UnitOfWork.EntityFramework.Test.Database;
 public class TestDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Person> Suppliers { get; set; }
+    public DbSet<Product> Products { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

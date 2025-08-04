@@ -16,5 +16,4 @@ public static partial class Fake
                 .RuleFor(x => x.Age, f => f.Random.Int(0, 100));
         }
     }
-
 }

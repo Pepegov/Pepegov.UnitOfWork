@@ -252,11 +252,12 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRe
     public T? Max<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false);
 
-    public Task<T> MaxAsync<T>(
-        Expression<Func<TEntity, T>> selector,
+    public Task<T?> MaxAsync<T>(Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 
@@ -267,11 +268,13 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRe
     public T? Min<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false);
     
-    public Task<T> MinAsync<T>(
+    public Task<T?> MinAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default);
 

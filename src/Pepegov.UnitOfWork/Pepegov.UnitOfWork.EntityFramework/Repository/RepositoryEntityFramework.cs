@@ -793,6 +793,7 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
     public T? Max<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = _dbSet;
@@ -801,15 +802,21 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
         {
             query = query.IgnoreQueryFilters();
         }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
         
-        return predicate is null
-            ? query.Max(selector)
-            : query.Where(predicate).Max(selector);
+        return defaultIfEmpty
+            ? query.Select(selector).DefaultIfEmpty().Max()
+            : query.Max(selector);
     }
 
-    public Task<T> MaxAsync<T>(
+    public Task<T?> MaxAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default)
     {
@@ -820,9 +827,20 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
             query = query.IgnoreQueryFilters();
         }
         
-        return predicate is null
-            ? query.MaxAsync(selector, cancellationToken)
-            : query.Where(predicate).MaxAsync(selector, cancellationToken);
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        if (defaultIfEmpty)
+        {
+            return query
+                .Select(selector)
+                .DefaultIfEmpty()
+                .MaxAsync(cancellationToken);
+        }
+
+        return query.MaxAsync(selector, cancellationToken)!;
     }
 
     #endregion
@@ -832,6 +850,7 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
     public T? Min<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = _dbSet;
@@ -841,14 +860,20 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
             query = query.IgnoreQueryFilters();
         }   
         
-        return predicate is null
-            ? query.Min(selector)
-            : query.Where(predicate).Min(selector);
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
+        
+        return defaultIfEmpty
+            ? query.Select(selector).DefaultIfEmpty().Min()
+            : query.Min(selector);
     }
 
-    public Task<T> MinAsync<T>(
+    public Task<T?> MinAsync<T>(
         Expression<Func<TEntity, T>> selector,
         Expression<Func<TEntity, bool>>? predicate = null,
+        bool defaultIfEmpty = false,
         bool ignoreQueryFilters = false,
         CancellationToken cancellationToken = default)
     {
@@ -857,11 +882,16 @@ public partial class RepositoryEntityFramework<TEntity> : IRepositoryEntityFrame
         if (ignoreQueryFilters)
         {
             query = query.IgnoreQueryFilters();
-        }   
+        }
+
+        if (predicate is not null)
+        {
+            query = query.Where(predicate);
+        }
         
-        return predicate is null
-            ? query.MinAsync(selector, cancellationToken)
-            : query.Where(predicate).MinAsync(selector, cancellationToken);
+        return defaultIfEmpty
+            ? query.Select(selector).DefaultIfEmpty().MinAsync(cancellationToken)
+            : query.MinAsync(selector, cancellationToken);
     }
 
     #endregion

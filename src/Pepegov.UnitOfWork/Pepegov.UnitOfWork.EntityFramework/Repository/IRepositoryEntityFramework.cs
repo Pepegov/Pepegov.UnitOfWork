@@ -100,6 +100,41 @@ public interface IRepositoryEntityFramework<TEntity> : IRepository<TEntity>, IRe
         CancellationToken cancellationToken = default);
 
     #endregion
+    
+    #region First
+
+    TEntity GetFirst(
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false);
+
+    TResult? GetFirst<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false);
+
+    Task<TResult> GetFirstAsync<TResult>(
+        Expression<Func<TEntity, TResult>> selector,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+
+    Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool disableTracking = true,
+        bool ignoreQueryFilters = false,
+        CancellationToken cancellationToken = default);
+
+    #endregion
 
     #region Find
 
